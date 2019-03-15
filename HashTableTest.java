@@ -184,7 +184,30 @@ public class HashTableTest {
 
   }
 
+  /**
+   * Tests if argConstructor has correct functionality 
+   * 
+   */
+   @Test
+  public void test006_getNoSuchElem() {
+    try {
+    
+      
+      htIntegerKey.insert(-1, "Last element");
+      
+      
+      assertTrue(htIntegerKey.get(-1)  == "Last element");
+      
+    } catch (IllegalNullKeyException e) {
 
+      fail("should not be able to insert null key");
+       } catch (Exception e) {
+      fail("insert null key should not throw exception " + e.getClass().getName());
+    }
+    
+    
+  }
+   
   /**
    * Tests if argConstructor has correct functionality 
    * 

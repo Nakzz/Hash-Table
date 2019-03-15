@@ -73,9 +73,11 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
    * @return
    */
   private int getHashIndex(K key) {
-
-    // TODO: finish function
-    int hashCode = key.hashCode();
+    
+    int hashCode = Math.abs(key.hashCode());
+    
+//      System.out.println(hashCode);
+    
     int index = hashCode % this.capacity;
     return index;
   }
