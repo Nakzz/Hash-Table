@@ -186,6 +186,8 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
 
     if (datastructure.get(hashIndex) == null) { // if first element
       datastructure.set(hashIndex, node);
+      // increment size
+      this.size++;
     } else { // if collision occurs
 
       HashNode<K, V> nextNode = datastructure.get(hashIndex);
@@ -199,8 +201,7 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
 //      System.out.println("  DOING BUCKETS for key:" + node.getKey());
     }
 
-    // increment size
-    this.size++;
+
 
   }
 
@@ -266,6 +267,7 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
     //if only node in the bucket, just remove since searching key is the only key
     if(node.getNext() == null) {
       this.datastructure.set(hashIndex, null);
+      this.size--;
     } else {
       //if its a bucket
       // get the next of that node. 
@@ -277,7 +279,7 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
         if (nextNode.getKey().compareTo(key) == 0) { 
           //set current node to get next
           this.datastructure.set(hashIndex, nextNode.getNext());
-          this.size--;
+          
           break;
         }
         
@@ -288,7 +290,7 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
     
    
     
-    this.size--;
+//    this.size--;
     
     return true;
 

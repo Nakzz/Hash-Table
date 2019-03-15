@@ -135,7 +135,7 @@ public class HashTableTest {
    */
   @Test
   public void test005_removeBuckets() {
-    int CAPACITY = 400;
+    int CAPACITY = 300;
 
     List<Integer> elements = new ArrayList<Integer>();
 
@@ -163,21 +163,19 @@ public class HashTableTest {
       }
     }
 
-    for (Integer element : elements) {
+    for (int i=0; i< elements.size(); i++) {
+      Integer element = elements.get(i);
       System.out.println("  Removing key:" + element);
       try {
         
         htIntegerKey.remove(element);
 
-        if (htIntegerKey.get(element) != null)
+        if (htIntegerKey.contains(element))
           fail("Key still exsists: " + element);
 
       } catch (IllegalNullKeyException e) {
         fail("remove should not throw exception " + e.getClass().getName());
         e.printStackTrace();
-      } catch (KeyNotFoundException e) {
-        // PASS
-        // e.printStackTrace();
       }
     }
 
@@ -342,16 +340,16 @@ public class HashTableTest {
 
     List<Integer> elements = new ArrayList<Integer>();
 
-    elements.add(889);
-    elements.add(188);
-    elements.add(837);
-    for (Integer element : elements) {
-
+    elements.add(21);
+    elements.add(32);
+    elements.add(43);
+    for (int i=0; i< elements.size(); i++) {
+      Integer element = elements.get(i);
       try {
         System.out.println("  trying to insert key:" + element);
         htIntegerKey.insert(element, "Chain insert: " + element);
         
-        assertTrue(!htIntegerKey.contains(element));
+        assertTrue(htIntegerKey.contains(element));
 
       } catch (IllegalNullKeyException e) {
         // TODO Auto-generated catch block
