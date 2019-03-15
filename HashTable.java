@@ -3,10 +3,11 @@ import java.util.ArrayList;
 //
 // TODO: implement all required methods
 //
-// TODO: describe the collision resolution scheme you have chosen
-// identify your scheme as open addressing or bucket
+// describe the collision resolution scheme you have chosen
+// using linked nodes within arraylist, which is a CHAINED BUCKET scheme
 //
-// TODO: explain your hashing algorithm here
+// explain your hashing algorithm here: The Algorithm for the hash function is the Hash code of the
+// key mod the current capacity of the data structure.
 // NOTE: you are not required to design your own algorithm for hashing,
 // since you do not know the type for K,
 // you must use the hashCode provided by the <K key> object
@@ -14,11 +15,10 @@ import java.util.ArrayList;
 /**
  * The Class HashTable.
  * 
- * May use any of these Java's built-in Java collection types: 
- * Arrays, List, ArrayList, LinkedList, Stack, Queue (interface), PriorityQueue, Deque
+ * May use any of these Java's built-in Java collection types: Arrays, List, ArrayList, LinkedList,
+ * Stack, Queue (interface), PriorityQueue, Deque
  * 
- * May not use HashTable, TreeMap, HashMap, etc. 
- * May not add any public members to ADT or your
+ * May not use HashTable, TreeMap, HashMap, etc. May not add any public members to ADT or your
  * implementation.
  *
  * @param <K> the key type
@@ -31,55 +31,126 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
   private int capacity;
   private int size;
   private double loadFactorThreshold;
-  private ArrayList<HashNode<K,V>> datastructure;
-  
+  private ArrayList<HashNode<K, V>> datastructure = null;
+
   /**
-   * Instantiates a new hash table.
-   * Starting with a capacity of 11 and threashold of 75% as default parameters.
+   * Instantiates a new hash table. Starting with a capacity of 11 and threashold of 75% as default
+   * parameters.
    */
   public HashTable() {
-this.capacity =11;
-this.loadFactorThreshold = .75;
-this.datastructure = new ArrayList<HashNode<K,V>>(this.capacity);
+    this.capacity = 11;
+    this.loadFactorThreshold = .75;
+    this.datastructure = initArraylist(this.datastructure, this.capacity);
   }
 
   /**
-   * Instantiates a new hash table. 
-   * The initial capacity must be a positive integer
+   * Instantiates a new hash table. The initial capacity must be a positive integer
    *
    * @param initialCapacity the initial capacity
    * @param loadFactorThreshold the load factor threshold
    */
   // threshold is the load factor that causes a resize and rehash
   public HashTable(int initialCapacity, double loadFactorThreshold) {
-this.capacity = initialCapacity;
-this.loadFactorThreshold = loadFactorThreshold;
-this.datastructure = new ArrayList<HashNode<K,V>>(this.capacity);
+    this.capacity = initialCapacity;
+    this.loadFactorThreshold = loadFactorThreshold;
+    this.datastructure = initArraylist(this.datastructure, initialCapacity);
   }
-  
+
+  private ArrayList<HashNode<K, V>> initArraylist(ArrayList<HashNode<K, V>> bucket, int size) {
+    bucket = new ArrayList<HashNode<K, V>>(size);
+    for (int i = 0; i < size; i++) {
+      bucket.add(null);
+    }
+    // System.out.println("Initiazlized ArrayList with size: " + size);
+    return bucket;
+  }
+
   /**
-   * Computes for hashIndex using a hash function. TODO:The Algorithm for the hash function is 
+   * Computes for hashIndex using a hash function. The Algorithm for the hash function is the Hash
+   * code of the key mod the current capacity of the data structure.
+   * 
    * @param key
    * @return
    */
   private int getHashIndex(K key) {
-    
-    //TODO: finish function
-    
-    return 0;
-    
+
+    // TODO: finish function
+    int hashCode = key.hashCode();
+    int index = hashCode % this.capacity;
+    return index;
   }
-  
+
+  // /**
+  // * Find the next prime of the given number
+  // * @param num
+  // * @return
+  // */
+  // protected int nextPrime(int num) {
+  // num++;
+  // for (int i = 2; i <num; i++) {
+  // if(num%i == 0) {
+  // num++;
+  // i=2;
+  // } else{
+  // continue;
+  // }
+  // }
+  // return num;
+  // }
+
+
   /**
-   * rehash 
+   * Increses the size of hash table 2x +1
+   * 
+   * 
+   * rehash current data table.
    */
   private void expandDS() {
-    
-    //TODO: finish function
-    
+
+    // increase the size of datastructure by 2x +1
+
+    // int newSize = nextPrime(this.capacity*2);
+    int newSize = (this.capacity * 2) + 1;
+    int oldSize = this.capacity;
+
+    ArrayList<HashNode<K, V>> newBucket = null;
+    ArrayList<HashNode<K, V>> oldBucket = this.datastructure;
+    HashNode<K, V> node = null;
+
+    newBucket = initArraylist(newBucket, newSize);
+
+
+    this.datastructure = newBucket;
+    this.capacity = newSize;
+    this.size = 0;
+
+    System.out.println("New Size: " + this.capacity + " old size: " + oldSize);
+
+//    for (int i = 0; i < oldSize; i++) {
+    for (int i = 0; i < oldBucket.size(); i++) {
+      node = oldBucket.get(i);
+
+      try {
+        if (node != null && node.key != null) {
+          this.insert(node.key, node.value);
+        }
+
+      } catch (IllegalNullKeyException e) {
+        System.out.println("This shouldn't happen. Check expandDS method!");
+        
+        e.printStackTrace();
+      } catch (DuplicateKeyException e) {
+        System.out.println("This shouldn't happen. Check expandDS method!");
+        e.printStackTrace();
+      }
+
+    }
+
+
+
   }
-  
-  
+
+
 
   /**
    * Add the key,value pair to the data structure and increase the number of keys. If key is null,
@@ -99,40 +170,42 @@ this.datastructure = new ArrayList<HashNode<K,V>>(this.capacity);
     if (this.contains(key))
       throw new DuplicateKeyException();
 
-    
-  //if loadFactor is larger than threshold, expandCapacity
-    if(this.loadFactorThreshold <= this.getLoadFactor()) {
+    // double lf = getLoadFactor();
+    // System.out.println("Table should resize. Current size: " + this.size + " currentLoadFactor: " +
+    // getLoadFactor());
+    // if loadFactor is larger than threshold, expandCapacity
+    if (this.loadFactorThreshold <= getLoadFactor()) {
       expandDS();
     }
-    
-    
+
+
     HashNode<K, V> node = new HashNode<K, V>(key, value, null);
-    
-    //insert by getting hashing index
+
+    // insert by getting hashing index
     int hashIndex = getHashIndex(key);
-    
-    if(datastructure.get(hashIndex) == null) { // if first element
-      datastructure.add(hashIndex, node);
+
+    if (datastructure.get(hashIndex) == null) { // if first element
+      datastructure.set(hashIndex, node);
     } else { // if collision occurs
-      
+
       HashNode<K, V> nextNode = datastructure.get(hashIndex);
-      
-      while(nextNode != null){
+
+      while (nextNode.getNext() != null) {
         nextNode = nextNode.getNext();
       }
-      
+
       nextNode.setNext(node);
-      
+
+//      System.out.println("  DOING BUCKETS for key:" + node.getKey());
     }
-     
-    // increment size 
+
+    // increment size
     this.size++;
-    
+
   }
 
   /**
-   * /**
-   * Returns true if the key is in the data structure. Returns false if key is not null and is not
+   * /** Returns true if the key is in the data structure. Returns false if key is not null and is not
    * present
    * 
    * Assuming Key is not null
@@ -140,29 +213,31 @@ this.datastructure = new ArrayList<HashNode<K,V>>(this.capacity);
    * @param key
    * @return if key contains in DS or not
    */
-  private boolean contains(K key) {
+  protected boolean contains(K key) {
     int hashIndex = getHashIndex(key);
-    
-    HashNode<K, V> node= datastructure.get(hashIndex);
-    
-    if(node == null) {
+
+
+
+    if (datastructure.get(hashIndex) == null) {
       return false;
-    } else if ( node.getKey().compareTo(key) == 0) { // found match
-      return true;
     } else {
-      // if buckets contain
-      
-  HashNode<K, V> nextNode = node;
-      
-      while(nextNode != null){
-        nextNode = nextNode.getNext();
-        if ( nextNode.getKey().compareTo(key) == 0) { // found match
-          return true;
+      HashNode<K, V> node = datastructure.get(hashIndex);
+      if (node.getKey().compareTo(key) == 0) { // found match
+
+        return true;
+      } else {
+        // if buckets contain
+
+        HashNode<K, V> nextNode = node;
+
+        while (nextNode != null) {
+          nextNode = nextNode.getNext();
+          if (nextNode != null && nextNode.getKey().compareTo(key) == 0) { // found match
+            return true;
+          }
         }
-        
       }
     }
-    
     return false;
   }
 
@@ -176,13 +251,52 @@ this.datastructure = new ArrayList<HashNode<K,V>>(this.capacity);
    */
   @Override
   public boolean remove(K key) throws IllegalNullKeyException {
-    // TODO Auto-generated method stub
-    return false;
+    if (key == null)
+      throw new IllegalNullKeyException();
+    
+    if (!this.contains(key))
+      return false;
+    
+    //first get that nodes bucket index 
+    int hashIndex = getHashIndex(key);
+    
+    //get that nodes bucket
+    HashNode<K, V> node = datastructure.get(hashIndex);
+    
+    //if only node in the bucket, just remove since searching key is the only key
+    if(node.getNext() == null) {
+      this.datastructure.set(hashIndex, null);
+    } else {
+      //if its a bucket
+      // get the next of that node. 
+      HashNode<K, V> nextNode = node;
+      
+      while(nextNode.getNext() !=null) {
+       
+        //check if this is the node.
+        if (nextNode.getKey().compareTo(key) == 0) { 
+          //set current node to get next
+          this.datastructure.set(hashIndex, nextNode.getNext());
+          this.size--;
+          break;
+        }
+        
+        nextNode = node.getNext();
+      }
+    } 
+    
+    
+   
+    
+    this.size--;
+    
+    return true;
+
   }
 
   /**
-   * Returns the value associated with the specified key Does not remove key or decrease number of
-   * keys
+   * TODO: switch this up with contain. return false if get=null Returns the value associated with the
+   * specified key Does not remove key or decrease number of keys
    * 
    * If key is null, throw IllegalNullKeyException If key is not found, throw KeyNotFoundException().
    *
@@ -193,7 +307,29 @@ this.datastructure = new ArrayList<HashNode<K,V>>(this.capacity);
    */
   @Override
   public V get(K key) throws IllegalNullKeyException, KeyNotFoundException {
-    // TODO Auto-generated method stub
+
+    int hashIndex = getHashIndex(key);
+
+    HashNode<K, V> node = datastructure.get(hashIndex);
+
+    if (node == null) {
+      return null;
+    } else if (node.getKey().compareTo(key) == 0) { // found match
+      return node.value;
+    } else {
+      // if buckets contain
+
+      HashNode<K, V> nextNode = node;
+
+      while (nextNode != null) {
+        nextNode = nextNode.getNext();
+        if (nextNode !=null && nextNode.getKey().compareTo(key) == 0) { // found match
+          return nextNode.value;
+        }
+      }
+    }
+
+
     return null;
   }
 
@@ -228,7 +364,11 @@ this.datastructure = new ArrayList<HashNode<K,V>>(this.capacity);
    */
   @Override
   public double getLoadFactor() {
-    return this.size/this.capacity;
+
+    // System.out.println("Size: " + size + " capacity: " + capacity);
+    double lf = (double) size / capacity;
+
+    return lf;
   }
 
 
@@ -255,9 +395,7 @@ this.datastructure = new ArrayList<HashNode<K,V>>(this.capacity);
    * following collision resolution strategies. Define this method to return an integer to indicate
    * which strategy.
    * 
-   * 1 OPEN ADDRESSING: linear probe 
-   * 2 OPEN ADDRESSING: quadratic probe 
-   * 3 OPEN ADDRESSING: double
+   * 1 OPEN ADDRESSING: linear probe 2 OPEN ADDRESSING: quadratic probe 3 OPEN ADDRESSING: double
    * hashing 4 CHAINED BUCKET: array of arrays 5 CHAINED BUCKET: array of linked nodes 6 CHAINED
    * BUCKET: array of search trees 7 CHAINED BUCKET: linked nodes of arrays 8 CHAINED BUCKET: linked
    * nodes of linked node 9 CHAINED BUCKET: linked nodes of search trees

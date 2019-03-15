@@ -85,7 +85,4 @@ class HashNode<K, V> {
   protected void setNext(HashNode<K, V> next){
     this.next = next;
   }
-
-  
-
 }
