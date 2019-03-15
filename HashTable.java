@@ -124,7 +124,7 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
     this.capacity = newSize;
     this.size = 0;
 
-    System.out.println("New Size: " + this.capacity + " old size: " + oldSize);
+//    System.out.println("New Size: " + this.capacity + " old size: " + oldSize);
 
 //    for (int i = 0; i < oldSize; i++) {
     for (int i = 0; i < oldBucket.size(); i++) {
@@ -310,12 +310,15 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
   @Override
   public V get(K key) throws IllegalNullKeyException, KeyNotFoundException {
 
+    if (key == null)
+      throw new IllegalNullKeyException();
+    
     int hashIndex = getHashIndex(key);
 
     HashNode<K, V> node = datastructure.get(hashIndex);
 
     if (node == null) {
-      return null;
+      throw new KeyNotFoundException();
     } else if (node.getKey().compareTo(key) == 0) { // found match
       return node.value;
     } else {
@@ -331,8 +334,7 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
       }
     }
 
-
-    return null;
+    throw new KeyNotFoundException();
   }
 
   /**

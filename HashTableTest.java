@@ -145,7 +145,7 @@ public class HashTableTest {
       if (!elements.contains(key)) {
         elements.add(key);
         try {
-           System.out.println(" trying to insert key:" + key);
+//           System.out.println(" trying to insert key:" + key);
           htIntegerKey.insert(key, "Chain insert: " + key);
 
         } catch (IllegalNullKeyException e) {
@@ -159,13 +159,13 @@ public class HashTableTest {
         }
 
       } else {
-        System.out.println(" Already inserted: " + key);
+//        System.out.println(" Already inserted: " + key);
       }
     }
 
     for (int i=0; i< elements.size(); i++) {
       Integer element = elements.get(i);
-      System.out.println("  Removing key:" + element);
+//      System.out.println("  Removing key:" + element);
       try {
         
         htIntegerKey.remove(element);
@@ -228,35 +228,7 @@ public class HashTableTest {
     }
   }
 
-  /**
-   * TODO: fix IMPLEMENTED AS EXAMPLE FOR YOU load factor .5
-   * 
-   */
-  // @Test
-  public void test011_expandingWithMinArgument() {
-    try {
-      htIntegerKey.insert(null, null);
-      fail("should not be able to insert null key");
-    } catch (IllegalNullKeyException e) {
-      /* expected */ } catch (Exception e) {
-      fail("insert null key should not throw exception " + e.getClass().getName());
-    }
-  }
 
-  /**
-   * TODO: fix IMPLEMENTED AS EXAMPLE FOR YOU
-   * 
-   */
-  // @Test
-  public void test012_contains() {
-    try {
-      htIntegerKey.insert(null, null);
-      fail("should not be able to insert null key");
-    } catch (IllegalNullKeyException e) {
-      /* expected */ } catch (Exception e) {
-      fail("insert null key should not throw exception " + e.getClass().getName());
-    }
-  }
 
   /**
    * Tests the single removing functionality of the program
@@ -346,16 +318,16 @@ public class HashTableTest {
     for (int i=0; i< elements.size(); i++) {
       Integer element = elements.get(i);
       try {
-        System.out.println("  trying to insert key:" + element);
+//        System.out.println("  trying to insert key:" + element);
         htIntegerKey.insert(element, "Chain insert: " + element);
         
         assertTrue(htIntegerKey.contains(element));
 
       } catch (IllegalNullKeyException e) {
-        // TODO Auto-generated catch block
+
         e.printStackTrace();
       } catch (DuplicateKeyException e) {
-        // TODO Auto-generated catch block
+   
         e.printStackTrace();
       } catch (Exception e) {
         fail("insert should not throw exception " + e.getClass().getName());
