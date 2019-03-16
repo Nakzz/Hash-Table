@@ -1,7 +1,13 @@
 import java.util.ArrayList;
 
-//
-// TODO: implement all required methods
+/**
+ * Title: HashTable 
+ * Course: CS400, Spring 2019 
+ * Author: Ajmain Naqib 
+ * Email: naqib@wisc.edu Lecturer's
+ * Name: Deb Deppeler
+ * 
+ */
 //
 // describe the collision resolution scheme you have chosen
 // using linked nodes within arraylist, which is a CHAINED BUCKET scheme
@@ -27,7 +33,6 @@ import java.util.ArrayList;
 //
 public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V> {
 
-  // TODO: ADD and comment DATA FIELD MEMBERS needed for your implementation
   private int capacity;
   private int size;
   private double loadFactorThreshold;
@@ -73,11 +78,11 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
    * @return
    */
   private int getHashIndex(K key) {
-    
+
     int hashCode = Math.abs(key.hashCode());
-    
-//      System.out.println(hashCode);
-    
+
+    // System.out.println(hashCode);
+
     int index = hashCode % this.capacity;
     return index;
   }
@@ -104,7 +109,6 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
   /**
    * Increses the size of hash table 2x +1
    * 
-   * 
    * rehash current data table.
    */
   private void expandDS() {
@@ -126,9 +130,9 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
     this.capacity = newSize;
     this.size = 0;
 
-//    System.out.println("New Size: " + this.capacity + " old size: " + oldSize);
+    // System.out.println("New Size: " + this.capacity + " old size: " + oldSize);
 
-//    for (int i = 0; i < oldSize; i++) {
+    // for (int i = 0; i < oldSize; i++) {
     for (int i = 0; i < oldBucket.size(); i++) {
       node = oldBucket.get(i);
 
@@ -139,17 +143,13 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
 
       } catch (IllegalNullKeyException e) {
         System.out.println("This shouldn't happen. Check expandDS method!");
-        
+
         e.printStackTrace();
       } catch (DuplicateKeyException e) {
         System.out.println("This shouldn't happen. Check expandDS method!");
         e.printStackTrace();
       }
-
     }
-
-
-
   }
 
 
@@ -200,7 +200,7 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
 
       nextNode.setNext(node);
 
-//      System.out.println("  DOING BUCKETS for key:" + node.getKey());
+      // System.out.println(" DOING BUCKETS for key:" + node.getKey());
     }
 
 
@@ -256,51 +256,50 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
   public boolean remove(K key) throws IllegalNullKeyException {
     if (key == null)
       throw new IllegalNullKeyException();
-    
+
     if (!this.contains(key))
       return false;
-    
-    //first get that nodes bucket index 
+
+    // first get that nodes bucket index
     int hashIndex = getHashIndex(key);
-    
-    //get that nodes bucket
+
+    // get that nodes bucket
     HashNode<K, V> node = datastructure.get(hashIndex);
-    
-    //if only node in the bucket, just remove since searching key is the only key
-    if(node.getNext() == null) {
+
+    // if only node in the bucket, just remove since searching key is the only key
+    if (node.getNext() == null) {
       this.datastructure.set(hashIndex, null);
       this.size--;
     } else {
-      //if its a bucket
-      // get the next of that node. 
+      // if its a bucket
+      // get the next of that node.
       HashNode<K, V> nextNode = node;
-      
-      while(nextNode.getNext() !=null) {
-       
-        //check if this is the node.
-        if (nextNode.getKey().compareTo(key) == 0) { 
-          //set current node to get next
+
+      while (nextNode.getNext() != null) {
+
+        // check if this is the node.
+        if (nextNode.getKey().compareTo(key) == 0) {
+          // set current node to get next
           this.datastructure.set(hashIndex, nextNode.getNext());
-          
+
           break;
         }
-        
+
         nextNode = node.getNext();
       }
-    } 
-    
-    
-   
-    
-//    this.size--;
-    
+    }
+
+
+
+    // this.size--;
+
     return true;
 
   }
 
   /**
-   * TODO: switch this up with contain. return false if get=null Returns the value associated with the
-   * specified key Does not remove key or decrease number of keys
+   * Returns the value associated with the specified key Does not remove key or decrease number of
+   * keys
    * 
    * If key is null, throw IllegalNullKeyException If key is not found, throw KeyNotFoundException().
    *
@@ -314,7 +313,7 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
 
     if (key == null)
       throw new IllegalNullKeyException();
-    
+
     int hashIndex = getHashIndex(key);
 
     HashNode<K, V> node = datastructure.get(hashIndex);
@@ -330,7 +329,7 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
 
       while (nextNode != null) {
         nextNode = nextNode.getNext();
-        if (nextNode !=null && nextNode.getKey().compareTo(key) == 0) { // found match
+        if (nextNode != null && nextNode.getKey().compareTo(key) == 0) { // found match
           return nextNode.value;
         }
       }

@@ -6,10 +6,17 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-
+/**
+ * Title: HashTableTest
+ * Course: CS400, Spring 2019
+ * Author: Ajmain Naqib
+ * Email: naqib@wisc.edu
+ * Lecturer's Name: Deb Deppeler
+ * 
+ */
 
 /**
- * TODO: add class header comments here.
+ * Testing class for HashTable
  */
 public class HashTableTest {
 
@@ -133,7 +140,7 @@ public class HashTableTest {
    * Tests the functionality of removing buckets
    * 
    */
-  @Test
+//  @Test
   public void test005_removeBuckets() {
     int CAPACITY = 300;
 
@@ -234,23 +241,6 @@ public class HashTableTest {
     
     
   }
-
-
-  /**
-   * TODO: fix IMPLEMENTED AS EXAMPLE FOR YOU
-   * 
-   */
-  // @Test
-  public void test010_rehash() {
-    try {
-      htIntegerKey.insert(null, null);
-      fail("should not be able to insert null key");
-    } catch (IllegalNullKeyException e) {
-      /* expected */ } catch (Exception e) {
-      fail("insert null key should not throw exception " + e.getClass().getName());
-    }
-  }
-
 
 
   /**
