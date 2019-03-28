@@ -36,7 +36,7 @@ public class MyProfiler<K extends Comparable<K>, V> {
      */
     public MyProfiler() {
         // Instantiate your HashTable and Java's TreeMap
-      this.hashtable = (HashTableADT<K, V>) new HashTable<Integer, String>();
+      this.hashtable = new HashTable<K, V>();
       this.treemap = new TreeMap<K, V>();
     }
     
@@ -51,10 +51,10 @@ public class MyProfiler<K extends Comparable<K>, V> {
         this.hashtable.insert(key, value);
        
       } catch (IllegalNullKeyException e) {
-        // TODO Auto-generated catch block
+
         e.printStackTrace();
       } catch (DuplicateKeyException e) {
-        // TODO Auto-generated catch block
+
         e.printStackTrace();
       }
       
@@ -70,10 +70,10 @@ public class MyProfiler<K extends Comparable<K>, V> {
       try {
         this.hashtable.get(key);
       } catch (IllegalNullKeyException e) {
-        // TODO Auto-generated catch block
+
         e.printStackTrace();
       } catch (KeyNotFoundException e) {
-        // TODO Auto-generated catch block
+
         e.printStackTrace();
       }
       
